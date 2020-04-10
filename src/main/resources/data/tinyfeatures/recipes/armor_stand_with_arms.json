@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "SAS",
+    "   "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "A": {
+      "item": "minecraft:armor_stand"
+    }
+  },
+  "result": {
+    "item": "tinyfeatures:armor_stand_with_arms",
+    "count": 1
+  }
+}

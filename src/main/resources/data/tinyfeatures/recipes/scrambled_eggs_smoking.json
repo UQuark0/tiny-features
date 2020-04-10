@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient":
+  {
+    "item": "minecraft:egg"
+  },
+  "result": "tinyfeatures:scrambled_eggs",
+  "experience": 100
+}
