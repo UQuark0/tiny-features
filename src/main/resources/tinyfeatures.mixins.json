@@ -4,7 +4,8 @@
   "package": "me.uquark.tinyfeatures.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "FarmlandDecayMixin"
+    "FarmlandMixin",
+    "CauldronMixin"
   ],
   "client": [
   ],
