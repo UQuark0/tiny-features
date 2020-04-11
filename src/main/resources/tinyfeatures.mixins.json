@@ -6,7 +6,8 @@
   "mixins": [
     "FarmlandBlockMixin",
     "CauldronBlockMixin",
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "AbstractTraderEntityMixin"
   ],
   "client": [
   ],
