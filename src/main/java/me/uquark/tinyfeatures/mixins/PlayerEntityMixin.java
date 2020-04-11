@@ -18,6 +18,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
@@ -47,7 +48,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             this.spawnPosition = null;
             this.spawnForced = false;
         }
-
     }
 
     private boolean isWithinSleepingRange(BlockPos sleepPos, Direction direction) {
@@ -68,8 +68,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         return !this.world.getBlockState(pos).canSuffocate(this.world, pos);
     }
 
+    @Overwrite
     public abstract boolean isCreative();
 
+    @Overwrite
     public Either<PlayerEntity.SleepFailureReason, Unit> trySleep(BlockPos pos) {
         Direction direction = (Direction)this.world.getBlockState(pos).get(HorizontalFacingBlock.FACING);
         if (!this.world.isClient) {
@@ -117,6 +119,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         return Either.right(Unit.INSTANCE);
     }
 
+    @Overwrite
     public void sleep(BlockPos pos) {
         this.resetStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST));
         if (isInSneakingPose())
