@@ -4,7 +4,7 @@ import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 
-public class ScrambledEggsItem extends Item{
+public class ScrambledEggsItem extends Item {
     public static final String name = "scrambled_eggs";
 
     public ScrambledEggsItem() {
