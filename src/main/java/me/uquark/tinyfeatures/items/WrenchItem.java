@@ -31,11 +31,13 @@ public class WrenchItem extends Item {
         PlayerEntity player = context.getPlayer();
 
         if (player != null) {
-            if (block instanceof FacingBlock) {
-                if (block instanceof PistonBlock)
-                    if (world.getBlockState(blockPos).get(PistonBlock.EXTENDED))
-                        return ActionResult.FAIL;
+            if (block instanceof PistonBlock)
+                if (world.getBlockState(blockPos).get(PistonBlock.EXTENDED))
+                    return ActionResult.FAIL;
+            if (block instanceof BedBlock)
+                return ActionResult.FAIL;
 
+            if (block instanceof FacingBlock) {
                 if (!world.isClient) {
                     if (player.isSneaking())
                         world.setBlockState(blockPos, blockState.with(FacingBlock.FACING, direction.getOpposite()));
