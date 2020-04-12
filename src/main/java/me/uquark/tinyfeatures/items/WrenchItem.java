@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 public class WrenchItem extends ToolItem {
     public static final String name = "wrench";
-    public static final Identifier WRENCH_SOUND_ID = new Identifier(TinyFeatures.modid, name);
+    public static final Identifier WRENCH_SOUND_ID = new Identifier(TinyFeatures.modid, "wrench_sound");
     public static final SoundEvent WRENCH_SOUND_EVENT = new SoundEvent(WRENCH_SOUND_ID);
 
     public WrenchItem(Settings settings) {
@@ -27,6 +27,9 @@ public class WrenchItem extends ToolItem {
     }
 
     private static void success(PlayerEntity player, ItemStack stack, BlockPos pos, World world) {
+        if (world.isClient)
+            return;
+
         if (!player.isCreative())
             stack.damage(2, player, playerEntity -> {
                 playerEntity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);

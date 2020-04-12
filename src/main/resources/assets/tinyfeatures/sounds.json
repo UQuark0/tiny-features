@@ -1,7 +1,7 @@
 {
-  "wrench": {
+  "wrench_sound": {
     "sounds": [
-      "tinyfeatures:wrench"
+      "tinyfeatures:wrench_sound"
     ]
   }
 }
