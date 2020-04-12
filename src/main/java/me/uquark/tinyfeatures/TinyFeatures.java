@@ -18,6 +18,8 @@ public class TinyFeatures implements ModInitializer {
         Registry.register(Registry.ITEM, new Identifier(modid, ArmorStandWithArmsItem.name), new ArmorStandWithArmsItem());
         Registry.register(Registry.ITEM, new Identifier(modid, WrenchItem.name), new WrenchItem());
 
+        Registry.register(Registry.SOUND_EVENT, WrenchItem.WRENCH_SOUND_ID, WrenchItem.WRENCH_SOUND_EVENT);
+
         CommandRegistry.INSTANCE.register(false, dispatcher -> {
             PistonBlockLimitCommand.register(dispatcher);
         });

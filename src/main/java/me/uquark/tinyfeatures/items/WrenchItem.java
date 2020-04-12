@@ -1,16 +1,22 @@
 package me.uquark.tinyfeatures.items;
 
+import me.uquark.tinyfeatures.TinyFeatures;
 import net.minecraft.block.*;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class WrenchItem extends ToolItem {
     public static final String name = "wrench";
+    public static final Identifier WRENCH_SOUND_ID = new Identifier(TinyFeatures.modid, name);
+    public static final SoundEvent WRENCH_SOUND_EVENT = new SoundEvent(WRENCH_SOUND_ID);
 
     public WrenchItem(Settings settings) {
         super(ToolMaterials.IRON, settings);
@@ -18,6 +24,22 @@ public class WrenchItem extends ToolItem {
 
     public WrenchItem() {
         this(new Settings().group(ItemGroup.TOOLS).maxCount(1));
+    }
+
+    private static void success(PlayerEntity player, ItemStack stack, BlockPos pos, World world) {
+        if (!player.isCreative())
+            stack.damage(2, player, playerEntity -> {
+                playerEntity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
+            });
+
+        world.playSound(
+                null,
+                pos,
+                WRENCH_SOUND_EVENT,
+                SoundCategory.BLOCKS,
+                1,
+                world.getRandom().nextFloat() + 0.5f
+        );
     }
 
     @Override
@@ -43,12 +65,8 @@ public class WrenchItem extends ToolItem {
                         world.setBlockState(blockPos, blockState.with(FacingBlock.FACING, direction.getOpposite()));
                     else
                         world.setBlockState(blockPos, blockState.with(FacingBlock.FACING, direction));
-                    if (!player.isCreative())
-                        stack.damage(2, player, playerEntity -> {
-                            playerEntity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
-                        });
                 }
-
+                success(player, stack, blockPos, world);
                 return ActionResult.SUCCESS;
             }
 
@@ -61,10 +79,7 @@ public class WrenchItem extends ToolItem {
                         world.setBlockState(blockPos, blockState.with(HorizontalFacingBlock.FACING, direction.getOpposite()));
                     else
                         world.setBlockState(blockPos, blockState.with(HorizontalFacingBlock.FACING, direction));
-                    if (!player.isCreative())
-                        stack.damage(2, player, playerEntity -> {
-                            playerEntity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
-                        });
+                    success(player, stack, blockPos, world);
                 }
 
                 return ActionResult.SUCCESS;
