@@ -11,6 +11,7 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 
 import java.util.Iterator;
 
@@ -35,6 +36,7 @@ public abstract class FarmlandBlockMixin extends Block {
         return true;
     }
 
+    @Overwrite
     public void onLandedUpon(World world, BlockPos pos, Entity entity, float distance) {
         if (!world.isClient && world.random.nextFloat() < distance - 0.5F && entity instanceof LivingEntity && (entity instanceof PlayerEntity || world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
             // MY CODE

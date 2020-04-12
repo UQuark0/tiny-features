@@ -30,46 +30,18 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
     @Shadow
-    private BlockPos spawnPosition;
-    @Shadow
-    private boolean spawnForced;
-    @Shadow
     private int sleepTimer;
 
-    public void setPlayerSpawn(BlockPos blockPos, boolean bl, boolean bl2) {
-        if (blockPos != null) {
-            if (bl2 && !blockPos.equals(this.spawnPosition)) {
-                this.sendMessage(new TranslatableText("block.minecraft.bed.set_spawn"));
-            }
-
-            this.spawnPosition = blockPos;
-            this.spawnForced = bl;
-        } else {
-            this.spawnPosition = null;
-            this.spawnForced = false;
-        }
-    }
-
-    private boolean isWithinSleepingRange(BlockPos sleepPos, Direction direction) {
-        return this.method_24278(sleepPos) || this.method_24278(sleepPos.offset(direction.getOpposite()));
-    }
-
-    private boolean method_24278(BlockPos blockPos) {
-        Vec3d vec3d = new Vec3d((double)blockPos.getX() + 0.5D, (double)blockPos.getY(), (double)blockPos.getZ() + 0.5D);
-        return Math.abs(this.getX() - vec3d.getX()) <= 3.0D && Math.abs(this.getY() - vec3d.getY()) <= 2.0D && Math.abs(this.getZ() - vec3d.getZ()) <= 3.0D;
-    }
-
-    private boolean isBedObstructed(BlockPos pos, Direction direction) {
-        BlockPos blockPos = pos.up();
-        return !this.doesNotSuffocate(blockPos) || !this.doesNotSuffocate(blockPos.offset(direction.getOpposite()));
-    }
-
-    public boolean doesNotSuffocate(BlockPos pos) {
-        return !this.world.getBlockState(pos).canSuffocate(this.world, pos);
-    }
-
-    @Overwrite
+    @Shadow
+    public abstract void setPlayerSpawn(BlockPos blockPos, boolean bl, boolean bl2);
+    @Shadow
+    public abstract boolean isWithinSleepingRange(BlockPos sleepPos, Direction direction);
+    @Shadow
+    public abstract boolean isBedObstructed(BlockPos pos, Direction direction);
+    @Shadow
     public abstract boolean isCreative();
+    @Shadow
+    public abstract void resetStat(Stat<?> stat);
 
     @Overwrite
     public Either<PlayerEntity.SleepFailureReason, Unit> trySleep(BlockPos pos) {
@@ -84,7 +56,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             }
 
             if (this.world.isDay()) {
-                if (isInSneakingPose())
+                if (isSneaking())
                     this.setPlayerSpawn(pos, false, true);
                 return Either.left(PlayerEntity.SleepFailureReason.NOT_POSSIBLE_NOW);
             }
@@ -122,14 +94,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Overwrite
     public void sleep(BlockPos pos) {
         this.resetStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST));
-        if (isInSneakingPose())
+        if (isSneaking())
             this.setPlayerSpawn(pos, false, true);
         super.sleep(pos);
-    }
-
-    public void resetStat(Stat<?> stat) {}
-
-    public boolean isInSneakingPose() {
-        return getPose() == EntityPose.CROUCHING;
     }
 }

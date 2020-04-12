@@ -17,6 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(CauldronBlock.class)
 public abstract class CauldronBlockMixin extends Block {
@@ -24,12 +26,11 @@ public abstract class CauldronBlockMixin extends Block {
         super(settings);
     }
 
-    public void setLevel(World world, BlockPos pos, BlockState state, int level) {
-        world.setBlockState(pos, (BlockState)state.with(CauldronBlock.LEVEL, MathHelper.clamp(level, 0, 3)), 2);
-        world.updateHorizontalAdjacent(pos, this);
-    }
+    @Shadow
+    public abstract void setLevel(World world, BlockPos pos, BlockState state, int level);
 
     @SuppressWarnings("deprecation")
+    @Overwrite
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(hand);
         if (itemStack.isEmpty()) {
