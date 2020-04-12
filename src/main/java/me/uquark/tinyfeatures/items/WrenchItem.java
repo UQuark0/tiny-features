@@ -1,20 +1,19 @@
 package me.uquark.tinyfeatures.items;
 
 import net.minecraft.block.*;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class WrenchItem extends Item {
+public class WrenchItem extends ToolItem {
     public static final String name = "wrench";
 
     public WrenchItem(Settings settings) {
-        super(settings);
+        super(ToolMaterials.IRON, settings);
     }
 
     public WrenchItem() {
@@ -29,6 +28,7 @@ public class WrenchItem extends Item {
         BlockState blockState = world.getBlockState(blockPos);
         Block block = blockState.getBlock();
         PlayerEntity player = context.getPlayer();
+        ItemStack stack = context.getStack();
 
         if (player != null) {
             if (block instanceof PistonBlock)
@@ -43,6 +43,10 @@ public class WrenchItem extends Item {
                         world.setBlockState(blockPos, blockState.with(FacingBlock.FACING, direction.getOpposite()));
                     else
                         world.setBlockState(blockPos, blockState.with(FacingBlock.FACING, direction));
+                    if (!player.isCreative())
+                        stack.damage(2, player, playerEntity -> {
+                            playerEntity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
+                        });
                 }
 
                 return ActionResult.SUCCESS;
@@ -57,6 +61,10 @@ public class WrenchItem extends Item {
                         world.setBlockState(blockPos, blockState.with(HorizontalFacingBlock.FACING, direction.getOpposite()));
                     else
                         world.setBlockState(blockPos, blockState.with(HorizontalFacingBlock.FACING, direction));
+                    if (!player.isCreative())
+                        stack.damage(2, player, playerEntity -> {
+                            playerEntity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
+                        });
                 }
 
                 return ActionResult.SUCCESS;
@@ -65,5 +73,10 @@ public class WrenchItem extends Item {
             return ActionResult.FAIL;
         }
         return ActionResult.FAIL;
+    }
+
+    @Override
+    public int getEnchantability() {
+        return 0;
     }
 }
