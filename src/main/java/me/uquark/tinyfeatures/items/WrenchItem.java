@@ -1,12 +1,18 @@
 package me.uquark.tinyfeatures.items;
 
 import me.uquark.tinyfeatures.TinyFeatures;
-import net.minecraft.block.*;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.PistonBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.state.property.Property;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -45,6 +51,18 @@ public class WrenchItem extends ToolItem {
         );
     }
 
+    private static boolean isLegalPropertyValue(DirectionProperty property, Direction value) {
+        if (property == Properties.FACING)
+            return true;
+        if (property == Properties.HORIZONTAL_FACING) {
+            return value != Direction.UP && value != Direction.DOWN;
+        }
+        if (property == Properties.HOPPER_FACING) {
+            return value != Direction.UP;
+        }
+        return false;
+    }
+
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         Direction direction = context.getSide();
@@ -62,33 +80,30 @@ public class WrenchItem extends ToolItem {
             if (block instanceof BedBlock)
                 return ActionResult.FAIL;
 
-            if (block instanceof FacingBlock) {
-                if (!world.isClient) {
-                    if (player.isSneaking())
-                        world.setBlockState(blockPos, blockState.with(FacingBlock.FACING, direction.getOpposite()));
-                    else
-                        world.setBlockState(blockPos, blockState.with(FacingBlock.FACING, direction));
+            DirectionProperty directionProperty = null;
+
+            for (Property<?> property : blockState.getProperties())
+                if (property instanceof DirectionProperty) {
+                    directionProperty = (DirectionProperty) property;
+                    break;
                 }
-                success(player, stack, blockPos, world);
-                return ActionResult.SUCCESS;
-            }
 
-            if (block instanceof HorizontalFacingBlock) {
-                if (direction == Direction.UP || direction == Direction.DOWN)
-                    return ActionResult.FAIL;
+            if (directionProperty == null)
+                return ActionResult.FAIL;
 
+            Direction newBlockDirection;
+            if (player.isSneaking())
+                newBlockDirection = direction.getOpposite();
+            else
+                newBlockDirection = direction;
+
+            if (isLegalPropertyValue(directionProperty, newBlockDirection)) {
                 if (!world.isClient) {
-                    if (player.isSneaking())
-                        world.setBlockState(blockPos, blockState.with(HorizontalFacingBlock.FACING, direction.getOpposite()));
-                    else
-                        world.setBlockState(blockPos, blockState.with(HorizontalFacingBlock.FACING, direction));
+                    world.setBlockState(blockPos, blockState.with(directionProperty, newBlockDirection));
                     success(player, stack, blockPos, world);
                 }
-
                 return ActionResult.SUCCESS;
             }
-
-            return ActionResult.FAIL;
         }
         return ActionResult.FAIL;
     }
