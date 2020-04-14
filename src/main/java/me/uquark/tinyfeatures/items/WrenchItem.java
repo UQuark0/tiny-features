@@ -11,10 +11,12 @@ import net.minecraft.item.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -51,19 +53,39 @@ public class WrenchItem extends ToolItem {
         );
     }
 
-    private static boolean isLegalPropertyValue(DirectionProperty property, Direction value) {
+    private static StringIdentifiable getLegalPropertyValue(Property<?> property, Direction value) {
+        if (property == Properties.AXIS)
+            return value.getAxis();
+
+        if (property == Properties.HORIZONTAL_AXIS) {
+            if (value != Direction.UP && value != Direction.DOWN)
+                return value.getAxis();
+            else
+                return null;
+        }
+
         if (property == Properties.FACING)
-            return true;
+            return value;
+
         if (property == Properties.HORIZONTAL_FACING) {
-            return value != Direction.UP && value != Direction.DOWN;
+            if (value != Direction.UP && value != Direction.DOWN)
+                return value;
+            else
+                return null;
         }
+
         if (property == Properties.HOPPER_FACING) {
-            return value != Direction.UP;
+            if (value != Direction.UP)
+                return value;
+            else
+                return null;
         }
-        return false;
+
+        return null;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public ActionResult useOnBlock(ItemUsageContext context) {
         Direction direction = context.getSide();
         World world = context.getWorld();
@@ -80,26 +102,34 @@ public class WrenchItem extends ToolItem {
             if (block instanceof BedBlock)
                 return ActionResult.FAIL;
 
-            DirectionProperty directionProperty = null;
+            Direction newDirection;
+            if (player.isSneaking())
+                newDirection = direction.getOpposite();
+            else
+                newDirection = direction;
+
+            Property<?> targetProperty = null;
 
             for (Property<?> property : blockState.getProperties())
-                if (property instanceof DirectionProperty) {
-                    directionProperty = (DirectionProperty) property;
+                if (property instanceof DirectionProperty || property == Properties.AXIS || property == Properties.HORIZONTAL_AXIS) {
+                    targetProperty = property;
                     break;
                 }
 
-            if (directionProperty == null)
+            if (targetProperty == null)
                 return ActionResult.FAIL;
 
-            Direction newBlockDirection;
-            if (player.isSneaking())
-                newBlockDirection = direction.getOpposite();
-            else
-                newBlockDirection = direction;
-
-            if (isLegalPropertyValue(directionProperty, newBlockDirection)) {
+            StringIdentifiable newPropertyValue = getLegalPropertyValue(targetProperty, newDirection);
+            if (newPropertyValue != null) {
                 if (!world.isClient) {
-                    world.setBlockState(blockPos, blockState.with(directionProperty, newBlockDirection));
+                    if (newPropertyValue instanceof Direction) {
+                        assert targetProperty instanceof DirectionProperty;
+                        world.setBlockState(blockPos, blockState.with((DirectionProperty) targetProperty, (Direction) newPropertyValue));
+                    }
+                    if (newPropertyValue instanceof Direction.Axis) {
+                        assert targetProperty instanceof EnumProperty;
+                        world.setBlockState(blockPos, blockState.with((EnumProperty<Direction.Axis>) targetProperty, (Direction.Axis) newPropertyValue));
+                    }
                     success(player, stack, blockPos, world);
                 }
                 return ActionResult.SUCCESS;
