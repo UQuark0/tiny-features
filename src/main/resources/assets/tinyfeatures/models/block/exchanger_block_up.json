@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "tinyfeatures:block/exchanger_block_base",
+    "front": "tinyfeatures:block/exchanger_block_up_front",
+    "side": "tinyfeatures:block/exchanger_block_base"
+  }
+}

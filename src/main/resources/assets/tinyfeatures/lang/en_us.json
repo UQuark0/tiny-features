@@ -1,5 +1,10 @@
 {
   "item.tinyfeatures.scrambled_eggs": "Scrambled eggs",
   "item.tinyfeatures.armor_stand_with_arms": "Armor Stand with arms",
-  "item.tinyfeatures.wrench": "Wrench"
+  "item.tinyfeatures.wrench": "Wrench",
+  "item.tinyfeatures.galleon": "Galleon",
+  "item.tinyfeatures.sickle": "Sickle",
+  "item.tinyfeatures.knut": "Knut",
+  "block.tinyfeatures.exchanger_block_up": "Raising exchanger",
+  "block.tinyfeatures.exchanger_block_down": "Lowering exchanger"
 }

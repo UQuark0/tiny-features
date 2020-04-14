@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "tinyfeatures:block/exchanger_block_down"
+    },
+    "facing=east": {
+      "model": "tinyfeatures:block/exchanger_block_down",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "tinyfeatures:block/exchanger_block_down",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "tinyfeatures:block/exchanger_block_down",
+      "y": 270
+    }
+  }
+}

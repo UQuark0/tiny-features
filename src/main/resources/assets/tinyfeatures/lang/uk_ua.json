@@ -1,5 +1,10 @@
 {
   "item.tinyfeatures.scrambled_eggs": "Яєчня",
   "item.tinyfeatures.armor_stand_with_arms": "Стійка для броні з руками",
-  "item.tinyfeatures.wrench": "Ключ"
+  "item.tinyfeatures.wrench": "Ключ",
+  "item.tinyfeatures.galleon": "Галеон",
+  "item.tinyfeatures.sickle": "Сикль",
+  "item.tinyfeatures.knut": "Кнат",
+  "block.tinyfeatures.exchanger_block_up": "Підвищуючий обмінник",
+  "block.tinyfeatures.exchanger_block_down": "Понижуючий обмінник"
 }
