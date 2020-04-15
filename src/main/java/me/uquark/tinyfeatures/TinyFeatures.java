@@ -14,9 +14,9 @@ public class TinyFeatures implements ModInitializer {
     public static final Item SCRAMBLED_EGGS = new ScrambledEggsItem();
     public static final Item ARMOR_STAND_WITH_ARMS = new ArmorStandWithArmsItem();
     public static final Item WRENCH = new WrenchItem();
-    public static final Item GALLEON = new Galleon();
-    public static final Item SICKLE = new Sickle();
-    public static final Item KNUT = new Knut();
+    public static final Item GALLEON = new GalleonItem();
+    public static final Item SICKLE = new SickleItem();
+    public static final Item KNUT = new KnutItem();
 
     public static final ExchangerBlockUp EXCHANGER_BLOCK_UP = new ExchangerBlockUp();
     public static final ExchangerBlockDown EXCHANGER_BLOCK_DOWN = new ExchangerBlockDown();
@@ -29,9 +29,9 @@ public class TinyFeatures implements ModInitializer {
         Registry.register(Registry.ITEM, new Identifier(modid, ArmorStandWithArmsItem.name), ARMOR_STAND_WITH_ARMS);
         Registry.register(Registry.ITEM, new Identifier(modid, WrenchItem.name), WRENCH);
 
-        Registry.register(Registry.ITEM, new Identifier(modid, Galleon.name), GALLEON);
-        Registry.register(Registry.ITEM, new Identifier(modid, Sickle.name), SICKLE);
-        Registry.register(Registry.ITEM, new Identifier(modid, Knut.name), KNUT);
+        Registry.register(Registry.ITEM, new Identifier(modid, GalleonItem.name), GALLEON);
+        Registry.register(Registry.ITEM, new Identifier(modid, SickleItem.name), SICKLE);
+        Registry.register(Registry.ITEM, new Identifier(modid, KnutItem.name), KNUT);
 
         Registry.register(Registry.BLOCK, new Identifier(modid, ExchangerBlockUp.name), EXCHANGER_BLOCK_UP);
         Registry.register(Registry.ITEM, new Identifier(modid, ExchangerBlockUp.name), EXCHANGER_BLOCK_UP.blockItem);

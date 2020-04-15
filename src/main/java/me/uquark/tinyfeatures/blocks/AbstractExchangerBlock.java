@@ -1,9 +1,9 @@
 package me.uquark.tinyfeatures.blocks;
 
 import me.uquark.tinyfeatures.TinyFeatures;
-import me.uquark.tinyfeatures.items.Galleon;
-import me.uquark.tinyfeatures.items.Knut;
-import me.uquark.tinyfeatures.items.Sickle;
+import me.uquark.tinyfeatures.items.GalleonItem;
+import me.uquark.tinyfeatures.items.KnutItem;
+import me.uquark.tinyfeatures.items.SickleItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -11,12 +11,17 @@ import net.minecraft.block.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.state.StateManager;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public abstract class AbstractExchangerBlock extends HorizontalFacingBlock {
     public BlockItem blockItem;
 
     public AbstractExchangerBlock() {
-        super(Settings.of(Material.METAL));
+        super(Settings.of(Material.METAL).strength(-1, 3600000));
         blockItem = new BlockItem(this, new Item.Settings().group(ItemGroup.MISC));
     }
 
@@ -26,15 +31,15 @@ public abstract class AbstractExchangerBlock extends HorizontalFacingBlock {
             ItemStack itemStack = player.inventory.getInvStack(i);
             if (player.getMainHandStack() == itemStack)
                 continue;
-            if (itemStack.getItem() instanceof Galleon) {
+            if (itemStack.getItem() instanceof GalleonItem) {
                 galleons += itemStack.getCount();
                 itemStack.decrement(itemStack.getCount());
             }
-            if (itemStack.getItem() instanceof Sickle) {
+            if (itemStack.getItem() instanceof SickleItem) {
                 sickles += itemStack.getCount();
                 itemStack.decrement(itemStack.getCount());
             }
-            if (itemStack.getItem() instanceof Knut) {
+            if (itemStack.getItem() instanceof KnutItem) {
                 knuts += itemStack.getCount();
                 itemStack.decrement(itemStack.getCount());
             }
@@ -54,5 +59,14 @@ public abstract class AbstractExchangerBlock extends HorizontalFacingBlock {
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getPlayerFacing().getOpposite());
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        if (exchange(player.getMainHandStack(), player))
+            return ActionResult.SUCCESS;
+        else
+            return ActionResult.FAIL;
     }
 }
