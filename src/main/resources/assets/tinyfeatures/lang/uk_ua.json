@@ -6,5 +6,6 @@
   "item.tinyfeatures.sickle": "Сикль",
   "item.tinyfeatures.knut": "Кнат",
   "block.tinyfeatures.exchanger_block_up": "Підвищуючий обмінник",
-  "block.tinyfeatures.exchanger_block_down": "Понижуючий обмінник"
+  "block.tinyfeatures.exchanger_block_down": "Понижуючий обмінник",
+  "block.tinyfeatures.inverted_redstone_lamp": "Інвертована лампа"
 }

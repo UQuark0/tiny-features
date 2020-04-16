@@ -6,5 +6,6 @@
   "item.tinyfeatures.sickle": "Sickle",
   "item.tinyfeatures.knut": "Knut",
   "block.tinyfeatures.exchanger_block_up": "Raising exchanger",
-  "block.tinyfeatures.exchanger_block_down": "Lowering exchanger"
+  "block.tinyfeatures.exchanger_block_down": "Lowering exchanger",
+  "block.tinyfeatures.inverted_redstone_lamp": "Inverted Redstone Lamp"
 }
